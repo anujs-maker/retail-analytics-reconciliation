@@ -1,0 +1,11 @@
+{
+  "synthetic_orders": 750000,
+  "raw_exceptions": 90000,
+  "raw_mismatch_rate_pct": 12.0,
+  "remaining_exceptions": 11250,
+  "after_mismatch_rate_pct": 1.5,
+  "reduction_percentage_points": 10.5,
+  "relative_reduction_pct": 87.5,
+  "reporting_time_saved_pct": 75,
+  "scope": "Synthetic educational reconstruction; does not prove resume achievements"
+}

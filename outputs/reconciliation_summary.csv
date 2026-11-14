@@ -1,0 +1,5 @@
+status,before,after
+matched,660000,738750
+amount_mismatch,45000,5625
+missing_invoice,30000,3750
+duplicate_invoice,15000,1875
