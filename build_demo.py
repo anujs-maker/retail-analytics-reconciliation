@@ -59,7 +59,8 @@ exceptions.to_csv(DATA/'exception_register.csv',index=False)
 def reconciliation(inv):
     s=inv.groupby('order_id').agg(invoice_count=('invoice_id','size'),invoice_amount_inr=('invoice_amount_inr','first')).reset_index()
     o=orders[['order_id','net_amount_inr']].merge(s,on='order_id',how='left',validate='one_to_one')
-    o['status']=np.select([o.invoice_count.isna(),o.invoice_count.gt(1),o.net_amount_inr.ne(o.invoice_amount_inr)],['missing_invoice','duplicate_invoice','amount_mismatch'],default='matched')
+    amount_mismatch = o.invoice_amount_inr.isna() | (o.net_amount_inr-o.invoice_amount_inr).abs().gt(0.01)
+    o['status']=np.select([o.invoice_count.isna(),o.invoice_count.gt(1),amount_mismatch],['missing_invoice','duplicate_invoice','amount_mismatch'],default='matched')
     return o
 before=reconciliation(raw);after=reconciliation(corrected)
 summary=pd.DataFrame({'status':['matched','amount_mismatch','missing_invoice','duplicate_invoice'],'before':[int((before.status==s).sum()) for s in ['matched','amount_mismatch','missing_invoice','duplicate_invoice']],'after':[int((after.status==s).sum()) for s in ['matched','amount_mismatch','missing_invoice','duplicate_invoice']]})
@@ -83,7 +84,7 @@ inventory['needs_reorder']=inventory.stock_on_hand.lt(inventory.reorder_point)
 inventory.to_csv(DATA/'inventory_snapshot.csv',index=False)
 # Weekly reporting effort comparison: demonstration narrative baseline provided, not computed from fake dates.
 pd.DataFrame({'process':['weekly_sales_reporting'],'before_hours':[8],'after_hours':[2],'time_saved_pct':[75]}).to_csv(OUT/'reporting_efficiency.csv',index=False)
-metrics={'synthetic_orders':N,'raw_exceptions':90000,'raw_mismatch_rate_pct':12.0,'remaining_exceptions':11250,'after_mismatch_rate_pct':1.5,'reduction_percentage_points':10.5,'relative_reduction_pct':87.5,'reporting_time_saved_pct':75,'scope':'Synthetic educational reconstruction; does not prove resume achievements'}
+metrics={'synthetic_orders':int(len(orders)),'raw_exceptions':int((before.status!='matched').sum()),'raw_mismatch_rate_pct':round(100*float((before.status!='matched').mean()),4),'remaining_exceptions':int((after.status!='matched').sum()),'after_mismatch_rate_pct':round(100*float((after.status!='matched').mean()),4),'reduction_percentage_points':round(100*float((before.status!='matched').mean()-after.status.ne('matched').mean()),4),'relative_reduction_pct':round(100*float(1-after.status.ne('matched').mean()/before.status.ne('matched').mean()),4),'reporting_time_saved_pct':75,'scope':'Synthetic educational reconstruction; does not prove resume achievements'}
 (OUT/'metrics.json').write_text(json.dumps(metrics,indent=2))
 plt.figure(figsize=(8,4))
 plt.bar(['Raw source','After review'],[12,1.5])

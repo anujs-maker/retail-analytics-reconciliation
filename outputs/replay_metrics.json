@@ -1,0 +1,30 @@
+{
+  "before": {
+    "counts": {
+      "matched": 660000,
+      "amount_mismatch": 45000,
+      "missing_invoice": 30000,
+      "duplicate_invoice": 15000
+    },
+    "orders": 750000,
+    "exception_count": 90000,
+    "exception_rate_pct": 12.0
+  },
+  "after": {
+    "counts": {
+      "matched": 738750,
+      "amount_mismatch": 5625,
+      "missing_invoice": 3750,
+      "duplicate_invoice": 1875
+    },
+    "orders": 750000,
+    "exception_count": 11250,
+    "exception_rate_pct": 1.5
+  },
+  "reporting_effort": {
+    "before_hours": 8,
+    "after_hours": 2,
+    "time_saved_pct": 75,
+    "status": "illustrative assumption; not measured by generated records"
+  }
+}
