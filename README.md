@@ -42,9 +42,10 @@ python -m venv .venv
 pip install -r requirements.txt
 python build_demo.py
 python run_analysis.py
+python -m unittest -v
 ```
 
-`build_demo.py` deterministically generates the **complete 750K-row dataset** under `data/` using a fixed seed, along with report outputs in `outputs/`. The large generated CSVs are excluded from Git to keep the repository lightweight. Small examples are committed under `data/sample/`.
+`build_demo.py` deterministically generates the **complete 750K-row dataset** under `data/` using a fixed seed, along with report outputs in `outputs/`. The large generated CSVs are excluded from Git to keep the repository lightweight. Small examples are committed under `data/sample/`. `run_analysis.py` derives the denominator from the generated order file and applies a 0.01 amount tolerance. The test suite covers seeded rates and missing/duplicate/amount precedence.
 
 **Open:** `outputs/retail_dashboard.html` for an offline demonstration.
 

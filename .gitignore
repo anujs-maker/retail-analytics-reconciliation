@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+*.log
+*.tmp
+/data/orders.csv
+/data/invoices_raw.csv
+/data/invoices_after_review.csv
+/data/exception_register.csv
